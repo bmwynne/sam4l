@@ -96,7 +96,7 @@
 #include <asf.h>
 #include "conf_board.h"
 #include "conf_clock.h"
-#include "conf_example.h"
+#include "conf_cph.h"
 
 /** Size of the receive buffer used by the PDCA, in bytes. */
 #define BUFFER_SIZE         100
@@ -111,7 +111,7 @@
 #define TC_FREQ             10
 
 #define STRING_EOL    "\r"
-#define STRING_HEADER "-- USART Serial Example --\r\n" \
+#define STRING_HEADER "-- CPH Cellular USB Printer Online --\r\n" \
 		"-- "BOARD_NAME" --\r\n" \
 		"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
 
@@ -301,7 +301,7 @@ int main(void)
 
 	/* Output example information. */
 	puts(STRING_HEADER);
-	puts("-- Start to echo serial inputs with PDCA -- \r\n\r");
+	puts("-- Serial Initialized -- \r\n\r");
 
 	/* Configure TC. */
 	configure_tc();

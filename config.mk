@@ -49,8 +49,8 @@ PART = sam4lc8c
 
 # Application target name. Given with suffix .a for library and .elf for a
 # standalone application.
-TARGET_FLASH = sam4l-skeleton-flash.elf
-TARGET_SRAM = sam4l-skeleton-sram.elf
+TARGET_FLASH = sam4l-printer-flash.elf
+TARGET_SRAM = sam4l-printer-sram.elf
 
 # List of C source files.
 CSRCS = \

@@ -19,7 +19,7 @@
 1. Download / Clone this project into your desired workspace.
 2. $> cd sam4l
 3. $> make
-4. $> openocd -f atmel_sam4l8_xplained_pro.cfg -c "program sam4l-skeleton-flash.elf verify reset exit"
+4. $> openocd -f atmel_sam4l8_xplained_pro.cfg -c "program sam4l-printer-flash.elf verify reset exit"
 
 ## Visualizing
 -------------

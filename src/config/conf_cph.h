@@ -44,24 +44,19 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_EXAMPLE_H_INCLUDED
-#define CONF_EXAMPLE_H_INCLUDED
+#ifndef CONF_CPH_H_INCLUDED
+#define CONF_CPH_H_INCLUDED
 
 #include "conf_board.h"
 #include "conf_clock.h"
 
 #define BOARD_ID_USART             USART1
-
 #define BOARD_USART                USART1
-
 #define BOARD_USART_BAUDRATE       115200
-
 #define USART_Handler              USART1_Handler
-
 #define USART_IRQn                 USART1_IRQn
-
 #define PDCA_PID_USART_RX          1
-
 #define PDCA_PID_USART_TX          19
 
-#endif /* CONF_EXAMPLE_H_INCLUDED */
+
+#endif /* CONF_CPH_H_INCLUDED */
