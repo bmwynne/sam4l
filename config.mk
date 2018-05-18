@@ -61,6 +61,9 @@ CSRCS = \
        common/services/clock/sam4l/sysclk.c               \
        common/services/serial/usart_serial.c              \
        common/services/sleepmgr/sam4l/sleepmgr.c          \
+       common/services/usb/class/vendor/host/example/sam4lc8c_sam4l8_xplained_pro/ui.c \
+       common/services/usb/class/vendor/host/uhi_vendor.c \
+       common/services/usb/uhc/uhc.c                      \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common/utils/stdio/read.c                          \
        common/utils/stdio/write.c                         \
@@ -71,6 +74,10 @@ CSRCS = \
        sam/drivers/tc/tc.c                                \
        sam/drivers/usart/usart.c                          \
        sam/drivers/wdt/wdt_sam4l.c                        \
+       sam/drivers/eic/eic.c                              \
+       sam/drivers/gpio/gpio.c                            \
+       sam/drivers/usbc/usbc_host.c                       \
+       sam/drivers/usbc/usbc_host.c                       \
        sam/utils/cmsis/sam4l/source/templates/exceptions.c \
        sam/utils/cmsis/sam4l/source/templates/gcc/startup_sam4l.c \
        sam/utils/cmsis/sam4l/source/templates/system_sam4l.c \
@@ -89,16 +96,23 @@ INC_PATH = \
        common/services/serial                             \
        common/services/serial/sam_uart                    \
        common/services/sleepmgr                           \
+       common/services/usb                                \
+       common/services/usb/uhc                            \
+       common/services/usb/class/vendor                   \
+       common/services/usb/class/vendor/host              \
        common/utils                                       \
        common/utils/stdio/stdio_serial                    \
        sam/boards                                         \
        sam/boards/sam4l8_xplained_pro                     \
+       sam/drivers/usbc                                   \
        sam/drivers/bpm                                    \
        sam/drivers/flashcalw                              \
        sam/drivers/pdca                                   \
        sam/drivers/tc                                     \
        sam/drivers/usart                                  \
        sam/drivers/wdt                                    \
+       sam/drivers/eic                                    \
+       sam/drivers/gpio                                   \
        sam/utils                                          \
        sam/utils/cmsis/sam4l/include                      \
        sam/utils/cmsis/sam4l/source/templates             \
