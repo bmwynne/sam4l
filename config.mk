@@ -77,7 +77,6 @@ CSRCS = \
        sam/drivers/eic/eic.c                              \
        sam/drivers/gpio/gpio.c                            \
        sam/drivers/usbc/usbc_host.c                       \
-       sam/drivers/usbc/usbc_host.c                       \
        sam/utils/cmsis/sam4l/source/templates/exceptions.c \
        sam/utils/cmsis/sam4l/source/templates/gcc/startup_sam4l.c \
        sam/utils/cmsis/sam4l/source/templates/system_sam4l.c \
