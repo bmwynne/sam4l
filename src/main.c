@@ -101,67 +101,6 @@
 #include "conf_clock.h"
 #include "conf_cph.h"
 
-/** USB Vendor **/
-#define MAIN_VENDOR_LOOPBACK_SIZE (1024)
-#define MAIN_VENDOR_ISO_SIZE_1    (MAIN_VENDOR_LOOPBACK_SIZE/2) // 1 invoke
-#define MAIN_VENDOR_ISO_SIZE_2    \
-	((MAIN_VENDOR_LOOPBACK_SIZE-MAIN_VENDOR_ISO_SIZE_1)/4) // 4 invokes
-
-//! Output buffer for vendor class test
-COMPILER_WORD_ALIGNED
-static uint8_t main_vendor_buf_out[MAIN_VENDOR_LOOPBACK_SIZE];
-
-//! Input buffer for vendor class test
-COMPILER_WORD_ALIGNED
-static uint8_t main_vendor_buf_in[MAIN_VENDOR_LOOPBACK_SIZE];
-
-//! Indicate that the test can be started
-static volatile bool main_b_usb_start_test = false;
-
-//! The control transfer is in progress
-static volatile bool main_b_control_busy;
-
-//! The (bulk/interrupt/iso) IN transfer is in progress
-static volatile bool main_b_in_busy;
-//! The (bulk/interrupt/iso) OUT transfer is in progress
-static volatile bool main_b_out_busy;
-
-//! The transfer status
-static volatile uhd_trans_status_t main_transfer_status;
-
-//! Index for ISO IN data transfer
-static volatile uint32_t main_vendor_iso_in_index;
-//! Index for ISO OUT data transfer
-static volatile uint32_t main_vendor_iso_out_index;
-
-static void main_init_buffers(void);
-static int  main_cmp_buffers(void);
-static bool main_control_is_available(void);
-static bool main_loop_back_control(void);
-static bool main_loop_back_int(void);
-static bool main_loop_back_bulk(void);
-static bool main_loop_back_iso(void);
-
-//! If the test is available (the endpoint is found on attached device)
-static bool (*loop_back_tests_is_available[])(void) = {
-	main_control_is_available,
-	uhi_vendor_bulk_is_available,
-	uhi_vendor_int_is_available,
-	uhi_vendor_iso_is_available,
-};
-
-//! The test function entries
-static bool (*loop_back_tests[])(void) = {
-	main_loop_back_control,
-	main_loop_back_bulk,
-	main_loop_back_int,
-	main_loop_back_iso,
-};
-
-//! Number of tests available
-#define NB_TESTS    (sizeof(loop_back_tests) / sizeof(loop_back_tests[0]))
-
-/** END USB Vendor **/
 
 /** Size of the receive buffer used by the PDCA, in bytes. */
 #define BUFFER_SIZE         100
@@ -350,283 +289,81 @@ static void configure_console(void)
 	stdio_serial_init(CONF_UART, &uart_serial_options);
 }
 
-void main_usb_sof_event(void)
-{
-	ui_usb_sof_event();
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+//           USB HOST
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+void main_usb_sof_event(void) {
+
+}
+void get_num_conn_devices(void) {
+	uint8_t b_num_devices;
+	b_num_devices = uhc_get_device_number();
+	printf("LOG MAIN WHILE()\n\rNumber of devices connected: %d.\n\r", b_num_devices);
 }
 
-void main_usb_vendor_change(uhc_device_t * dev, bool b_present)
-{
-	UNUSED(dev);
-	main_b_usb_start_test = b_present;
+void usb_init(void) {
+	uhc_start();
+	printf("USB INIT");
 }
 
-/** \brief Initialize test buffers
- */
-static void main_init_buffers(void)
+static bool flag_vendor_test_start = false;
+void vendor_change(uhc_device_t * dev, bool b_plug)
 {
-	uint32_t i;
-	// Fill buffer OUT
-	for (i = 0; i < MAIN_VENDOR_LOOPBACK_SIZE; i += 4) {
-		main_vendor_buf_out[i + 0] = (i >> 24) & 0xFF;
-		main_vendor_buf_out[i + 1] = (i >> 16) & 0xFF;
-		main_vendor_buf_out[i + 2] = (i >>  8) & 0xFF;
-		main_vendor_buf_out[i + 3] = (i >>  0) & 0xFF;
-	}
-	// Reset buffer IN
-	memset(main_vendor_buf_in, 0x55, MAIN_VENDOR_LOOPBACK_SIZE);
+   // USB Device Vendor connected
+   flag_vendor_test_start = b_plug;
+   printf("USB DEVICE VENDOR CONNECTED");
+}
+static void bulk_in_done (usb_add_t add, usb_ep_t ep, uhd_trans_status_t status, iram_size_t nb_transfered) {
+  if (status != UHD_TRANS_NOERROR) {
+    return; // Error during transfer
+  }
+  // Data received then restart test
+  flag_vendor_test_start = true;
+}
+#define MESSAGE "Hello bulk"
+#define MESSAGE_SIZE sizeof(MESSAGE)
+#define HELLO_SIZE 5
+#define HELLO_BULK_SIZE 10
+
+uint8_t out_buffer[MESSAGE_SIZE+1] = MESSAGE;
+uint8_t in_buffer[MESSAGE_SIZE+1];
+
+void my_task(void) {
+   if (!flag_vendor_test_start) {
+     return;
+   }
+   flag_vendor_test_start = false;
+   // Send data through control endpoint
+   uhi_vendor_control_out_run(out_buffer, HELLO_SIZE, NULL);
+   // Check if bulk endpoints are available
+   if (uhi_vendor_bulk_is_available()) {
+     // Send data through bulk OUT endpoint
+     uhi_vendor_bulk_out_run(out_buffer, HELLO_BULK_SIZE, NULL);
+     // Receive data through bulk IN endpoint
+     uhi_vendor_bulk_in_run(in_buffer, sizeof(in_buffer),
+             bulk_in_done);
+   }
 }
 
-/** \brief Compare output buffer with input buffer
- *
- * \return 0 if buffer is equal, else -1
- */
-static int main_cmp_buffers(void)
-{
-	if (0!=memcmp( main_vendor_buf_out, main_vendor_buf_in,
-			MAIN_VENDOR_LOOPBACK_SIZE) ) {
-		return -1;
-	}
-	return 0;
-}
+///////////////////////////////////////////
+///////////////////////////////////////////
+//			END USB HOST
+///////////////////////////////////////////
+///////////////////////////////////////////
 
-/** \brief Check if control test is available (control EP exist)
- *
- * \return always true
- */
-static bool main_control_is_available(void)
-{
-	return true;
-}
-
-/** \brief End of setup callback
- *
- * \param add           USB address of the setup request
- * \param status        Transfer status
- * \param payload_trans Number of data transfered during DATA phase
- */
-static void main_control_transfer_done (
-		usb_add_t add,
-		uhd_trans_status_t status,
-		uint16_t payload_trans)
-{
-	UNUSED(add);
-	UNUSED(payload_trans);
-	main_transfer_status = status;
-	main_b_control_busy = false;
-}
-
-/** \brief Perform loop back test on control endpoint
- *
- * \return \c 1 if test passed, \c 0 if test failed
- */
-static bool main_loop_back_control(void)
-{
-	main_b_control_busy = true;
-	if (!uhi_vendor_control_out_run(main_vendor_buf_out,
-			MAIN_VENDOR_LOOPBACK_SIZE,
-			main_control_transfer_done)) {
-		return false;
-	}
-	while (main_b_control_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-
-	main_b_control_busy = true;
-	if (!uhi_vendor_control_in_run(main_vendor_buf_in,
-			MAIN_VENDOR_LOOPBACK_SIZE,
-			main_control_transfer_done)) {
-		return false;
-	}
-	while (main_b_control_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-	return true;
-}
-
-/** \brief End of transfer callback
- *
- * \param add           USB address used by the transfer
- * \param ep            Endpoint address used by the transfer
- * \param status        Transfer status
- * \param nb_transfered Number of data transfered
- */
-static void main_transfer_done (
-		usb_add_t add,
-		usb_ep_t ep,
-		uhd_trans_status_t status,
-		iram_size_t nb_transfered)
-{
-	UNUSED(add);
-	UNUSED(nb_transfered);
-
-	main_transfer_status = status;
-	if (ep & USB_EP_DIR_IN) {
-		main_b_in_busy = false;
-	} else {
-		main_b_out_busy = false;
-	}
-}
-
-/** \brief Perform loop back test on control endpoint
- */
-static bool main_loop_back_bulk(void)
-{
-
-	main_b_out_busy = true;
-	if (!uhi_vendor_bulk_out_run(main_vendor_buf_out,
-			MAIN_VENDOR_LOOPBACK_SIZE, main_transfer_done)) {
-		return false;
-	}
-	while (main_b_out_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-
-	main_b_in_busy = true;
-	if (!uhi_vendor_bulk_in_run(main_vendor_buf_in,
-			MAIN_VENDOR_LOOPBACK_SIZE, main_transfer_done)) {
-		return false;
-	}
-	while (main_b_in_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-	return true;
-}
-
-/** \brief Perform loop back test on interrupt endpoint
- *
- * \return \c 1 if test passed, \c 0 if test failed
- */
-static bool main_loop_back_int(void)
-{
-	main_b_out_busy = true;
-	if (!uhi_vendor_int_out_run(main_vendor_buf_out,
-			MAIN_VENDOR_LOOPBACK_SIZE, main_transfer_done)) {
-		return false;
-	}
-	while (main_b_out_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-
-	main_b_in_busy = true;
-	if (!uhi_vendor_int_in_run(main_vendor_buf_in,
-			MAIN_VENDOR_LOOPBACK_SIZE, main_transfer_done)) {
-		return false;
-	}
-	while (main_b_in_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-	return true;
-}
-
-/** \brief End of ISO IN transfer callback
- *
- * \param add           USB address used by the transfer
- * \param ep            Endpoint address used by the transfer
- * \param status        Transfer status
- * \param nb_transfered Number of data transfered
- */
-static void main_iso_in_done (
-		usb_add_t add,
-		usb_ep_t ep,
-		uhd_trans_status_t status,
-		iram_size_t nb_transfered)
-{
-	UNUSED(add);
-	UNUSED(ep);
-	main_vendor_iso_in_index += nb_transfered;
-	if (main_vendor_iso_in_index >= MAIN_VENDOR_LOOPBACK_SIZE) {
-		main_transfer_status = status;
-		main_b_in_busy = false;
-	} else {
-		uhi_vendor_iso_in_run(
-			&main_vendor_buf_in[main_vendor_iso_in_index],
-			MAIN_VENDOR_LOOPBACK_SIZE - main_vendor_iso_in_index,
-			main_iso_in_done);
-	}
-}
-
-/** \brief End of ISO OUT transfer callback
- *
- * \param add           USB address used by the transfer
- * \param ep            Endpoint address used by the transfer
- * \param status        Transfer status
- * \param nb_transfered Number of data transfered
- */
-static void main_iso_out_done (
-		usb_add_t add,
-		usb_ep_t ep,
-		uhd_trans_status_t status,
-		iram_size_t nb_transfered)
-{
-	UNUSED(add);
-	UNUSED(ep);
-	UNUSED(status);
-	main_vendor_iso_out_index += nb_transfered;
-	if (main_vendor_iso_out_index >= MAIN_VENDOR_LOOPBACK_SIZE) {
-		main_transfer_status = status;
-		main_b_out_busy = false;
-	} else {
-		uhi_vendor_iso_out_run(
-			&main_vendor_buf_out[main_vendor_iso_out_index],
-			MAIN_VENDOR_ISO_SIZE_2,
-			main_iso_out_done);
-	}
-}
-
-/** \brief Perform loop back test on ISO endpoint
- *
- * \return \c 1 if test passed, \c 0 if test failed
- */
-static bool main_loop_back_iso(void)
-{
-	main_b_out_busy = true;
-	main_vendor_iso_out_index = 0;
-	if (!uhi_vendor_iso_out_run(main_vendor_buf_out,
-			MAIN_VENDOR_ISO_SIZE_1, main_iso_out_done)) {
-		return false;
-	}
-	main_b_in_busy = true;
-	main_vendor_iso_in_index = 0;
-	if (!uhi_vendor_iso_in_run(main_vendor_buf_in,
-			MAIN_VENDOR_LOOPBACK_SIZE, main_iso_in_done)) {
-		return false;
-	}
-	while (main_b_out_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-	while (main_b_in_busy);
-	if (main_transfer_status != UHD_TRANS_NOERROR) {
-		return false;
-	}
-	return true;
-}
-
-
-/**
- * \brief Application entry point for usart_serial example.
- *
- * \return Unused (ANSI-C compatibility).
- */
 int main(void)
 {
 	/* Initialize the SAM system. */
 	sysclk_init();
-	board_init();
 	irq_initialize_vectors();
 	cpu_irq_enable();
-	// Initialize the sleep manager
+	board_init();
+	usb_init();
 	sleepmgr_init();
-	ui_init();
-	// Start USB host stack
-	uhc_start();
 
 	/* Configure UART for debug message output. */
 	configure_console();
@@ -659,38 +396,15 @@ int main(void)
 	// As a consequence, the user application does only have :
 	// - to play with the power modes
 	// - to test all endpoint pares enumerated
-	while (true) {
-		sleepmgr_enter_sleep();
-		if (main_b_usb_start_test) {
-			main_b_usb_start_test = false;
-			bool main_usb_test_fail = false;
+	
+	get_num_conn_devices();
 
-			for (uint8_t test = 0; test < NB_TESTS; test ++) {
-				if (!loop_back_tests_is_available[test]()) {
-					// Test not available
-					continue;
-				}
-				main_init_buffers();
-				if (!loop_back_tests[test]()) {
-					// USB communication error
-					main_usb_test_fail = true;
-					break;
-				}
-				if (main_cmp_buffers()) {
-					// Data compare error
-					main_usb_test_fail = true;
-					break;
-				}
-			}
-			// Show result
-			if (!main_usb_test_fail) {
-				// All tests passed
-				ui_test_finish(true);
-			} else {
-				// Fail
-				ui_test_finish(false);
-			}
-		}
+
+
+	while (true) {
+		
+		
+		sleepmgr_enter_sleep();
 	}
 }
 

@@ -54,8 +54,11 @@
  * @{
  */
 
+#define USB_HOST_POWER_MAX 500
 //! Array of UHI APIs Define the list of UHI supported by USB host.
 #define USB_HOST_UHI        UHI_VENDOR
+#define UHI_VENDOR_CHANGE(dev, b_plug) vendor_change(dev, b_plug)
+#define UHI_VENDOR_VID_PID_LIST {USB_VID_ATMEL, USB_PID_ATMEL_ASF_VENDOR_CLASS}
 
 //! Maximum current allowed on Vbus (mA)
 #define USB_HOST_POWER_MAX  500
@@ -108,26 +111,7 @@
 //! Called when a USB device enumeration is completed.
 #define UHC_ENUM_EVENT(dev,b_status)        ui_usb_enum_event(dev,b_status)
 
-
-//@}
-
-
-
-/**
- * USB Interface Configuration
- * @{
- */
-/**
- * Configuration of Vendor interface
- * @{
- */
-#define UHI_VENDOR_CHANGE(dev, b_plug)      main_usb_vendor_change(dev, b_plug)
-#define UHI_VENDOR_VID_PID_LIST {USB_VID_ATMEL, USB_PID_ATMEL_ASF_VENDOR_CLASS}
-//@}
-//@}
-
-//@}
-
+#include "uhc.h"
 #include "uhi_vendor.h"
 #include "ui.h"
 #include "main.h"

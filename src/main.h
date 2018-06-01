@@ -48,13 +48,16 @@
 #define _MAIN_H_
 
 //! \brief Notify that a SOF has been sent (each 1 ms)
+void get_num_conn_devices(void);
 void main_usb_sof_event(void);
+void usb_init(void);
+void my_task(void);
 
 /*! \brief Notify that a USB device vendor has been connected or disconnected.
  *
  * \param dev         Pointer on USB device information
  * \param b_present   true, if the device has been connected
  */
-void main_usb_vendor_change(uhc_device_t *dev, bool b_present);
+
 
 #endif // _MAIN_H_
