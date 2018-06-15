@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief Chip-specific sleep manager configuration
+ * \brief ARM functions for busy-wait delay loops
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,10 +43,19 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
-#ifndef CONF_SLEEPMGR_INCLUDED
-#define CONF_SLEEPMGR_INCLUDED
 
-// Sleep manager options
-#define CONFIG_SLEEPMGR_ENABLE
+#include "cycle_counter.h"
 
-#endif /* CONF_SLEEPMGR_INCLUDED */
+// Delay loop is put to SRAM so that FWS will not affect delay time
+OPTIMIZE_HIGH
+RAMFUNC
+void portable_delay_cycles(unsigned long n)
+{
+	UNUSED(n);
+
+	__asm (
+		"loop: DMB	\n"
+		"SUBS R0, R0, #1  \n"
+		"BNE.N loop         "
+	);
+}

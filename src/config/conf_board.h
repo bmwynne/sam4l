@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief  Configuration File for SAM4L8 Xplained Pro Board.
+ * \brief Board configuration.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,6 +48,9 @@
 #define CONF_BOARD_H_INCLUDED
 
 /** Enable Com Port. */
+#define CONF_BOARD_UART_CONSOLE
+
+/** Enable Com Port. */
 #define CONF_BOARD_COM_PORT
 
 /* Auto-initialize USART GPIOs when board_init() is called */
@@ -55,10 +58,10 @@
 /* Enable USB interface (USB) */
 #define CONF_BOARD_USB_PORT
 /* Enable USB VBUS detect */
-#define CONF_BOARD_USB_VBUS_DETECT
+//#define CONF_BOARD_USB_VBUS_DETECT
 /* ID detect enabled */
-#define CONF_BOARD_USB_ID_DETECT
+//#define CONF_BOARD_USB_ID_DETECT
 /* Host VBUS control enabled */
 #define CONF_BOARD_USB_VBUS_CONTROL
 
-#endif  /* CONF_BOARD_H_INCLUDED */
+#endif /* CONF_BOARD_H_INCLUDED */

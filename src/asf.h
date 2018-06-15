@@ -56,7 +56,10 @@
 #include <compiler.h>
 #include <status_codes.h>
 
-// From module: EIC  - External Interrupt Controller
+// From module: Delay routines
+#include <delay.h>
+
+// From module: EIC - External Interrupt Controller
 #include <eic.h>
 
 // From module: FLASHCALW Controller Software Driver
@@ -100,6 +103,15 @@
 // From module: System Clock Control - SAM4L implementation
 #include <sysclk.h>
 
+// From module: TC - Timer Counter
+#include <tc.h>
+
+// From module: USART - Serial interface- SAM implementation for devices with only USART
+#include <serial.h>
+
+// From module: USART - Univ. Syn Async Rec/Trans
+#include <usart.h>
+
 // From module: USB Host Vendor (Single Class support)
 #include <uhi_vendor.h>
 
@@ -110,19 +122,7 @@
 // From module: USB Vendor Protocol
 #include <usb_protocol_vendor.h>
 
-// From module: TC - Timer Counter
-#include <tc.h>
-
-// From module: USART - Serial interface- SAM implementation for devices with only USART
-#include <serial.h>
-
-// From module: USART - Univ. Syn Async Rec/Trans
-#include <usart.h>
-
 // From module: WDT - Watchdog Timer
 #include <wdt_sam4l.h>
-
-
-
 
 #endif // ASF_H

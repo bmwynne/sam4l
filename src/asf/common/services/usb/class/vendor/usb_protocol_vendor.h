@@ -58,9 +58,9 @@
  * \name Vendor class values
  */
 //@{
-#define  VENDOR_CLASS                  0xFF
-#define  VENDOR_SUBCLASS               0xFF
-#define  VENDOR_PROTOCOL               0xFF
+#define  VENDOR_CLASS                  0x07
+#define  VENDOR_SUBCLASS               0x01
+#define  VENDOR_PROTOCOL               0x02
 //@}
 
 

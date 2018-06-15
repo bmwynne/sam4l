@@ -94,5 +94,8 @@ void ui_test_finish(bool b_success);
  */
 void ui_usb_enum_event(uhc_device_t *dev, uhc_enum_status_t status);
 
+extern volatile int ui_usb_dev_conn;
+extern volatile uhc_device_t * ui_usb_dev_dsc;
+extern volatile int ui_usb_dev_enum;
 
 #endif // _UI_H_

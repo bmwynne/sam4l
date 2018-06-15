@@ -269,7 +269,7 @@ bool uhi_vendor_int_is_available(void);
 bool uhi_vendor_iso_is_available(void);
 
 //@}
-extern void vendor_change(uhc_device_t* dev, bool b_plug);
+
 
 /**
  * \page uhi_vendor_quickstart Quick start guide for USB host vendor module (UHI vendor)

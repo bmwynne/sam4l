@@ -50,7 +50,6 @@
 
 /* Get USB host configuration */
 #include "conf_usb_host.h"
-#include "sam4l/sysclk.h"
 #include "sysclk.h"
 #include "uhd.h"
 #include "usbc_otg.h"
@@ -422,8 +421,6 @@ static uint8_t uhd_pipes_unfreeze;
 static uint8_t uhd_pipes_error;
 
 //@}
-
-
 
 static void uhd_interrupt(void);
 static void uhd_sof_interrupt(void);

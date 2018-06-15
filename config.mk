@@ -64,6 +64,7 @@ CSRCS = \
        common/services/usb/class/vendor/host/example/sam4lc8c_sam4l8_xplained_pro/ui.c \
        common/services/usb/class/vendor/host/uhi_vendor.c \
        common/services/usb/uhc/uhc.c                      \
+       common/services/delay/sam/cycle_counter.c          \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common/utils/stdio/read.c                          \
        common/utils/stdio/write.c                         \
@@ -99,6 +100,8 @@ INC_PATH = \
        common/services/usb/uhc                            \
        common/services/usb/class/vendor                   \
        common/services/usb/class/vendor/host              \
+       common/services/delay                              \
+       common/services/delay/sam                          \
        common/utils                                       \
        common/utils/stdio/stdio_serial                    \
        sam/boards                                         \

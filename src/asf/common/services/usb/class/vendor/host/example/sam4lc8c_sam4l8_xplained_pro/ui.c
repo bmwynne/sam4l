@@ -81,6 +81,10 @@ static bool ui_test_done;
 /*! Result of the Vendor test */
 static bool ui_test_result;
 
+volatile int ui_usb_dev_conn = 0;
+volatile uhc_device_t * ui_usb_dev_dsc = 0;
+volatile int ui_usb_dev_enum = 0;
+
 void ui_usb_vbus_change(bool b_vbus_present)
 {
 	UNUSED(b_vbus_present);
@@ -93,8 +97,11 @@ void ui_usb_vbus_error(void)
 void ui_usb_connection_event(uhc_device_t *dev, bool b_present)
 {
 	UNUSED(dev);
+	ui_usb_dev_conn = 1;
+	ui_usb_dev_dsc = dev;
 	if (!b_present) {
 		LED_On(LED0);
+		ui_usb_dev_dsc = 0;
 		ui_enum_status = UHC_ENUM_DISCONNECT;
 	}
 }
@@ -104,6 +111,7 @@ void ui_usb_enum_event(uhc_device_t *dev, uhc_enum_status_t status)
 	UNUSED(dev);
 	ui_enum_status = status;
 	if (ui_enum_status == UHC_ENUM_SUCCESS) {
+		ui_usb_dev_enum = 1;
 		switch (dev->speed) {
 		case UHD_SPEED_HIGH:
 			ui_device_speed_blink = 250;
