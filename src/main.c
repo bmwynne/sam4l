@@ -169,7 +169,8 @@ void TC00_Handler(void)
 #define STRING_EOL    "\r"
 #define STRING_HEADER "-- CPH Cellular USB Printer Online --\r\n" \
 "-- "BOARD_NAME" --\r\n" \
-"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
+"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL	\
+"-- Repo: github.com/bmwynne/sam4l"
 
 static void configure_console(void)
 {
@@ -322,6 +323,7 @@ int main(void) {
 	tc_start(TC0, 0);	/* Start timer. */
 	
 	puts(STRING_HEADER);
+	
 	printf("-----LOG MAIN-----:\n\rBoard Initialized\n\r");
 
 	printf("-----LOG MAIN-----:\n\rEntering While().\n\r");
