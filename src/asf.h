@@ -56,8 +56,17 @@
 #include <compiler.h>
 #include <status_codes.h>
 
+// From module: Delay routines
+#include <delay.h>
+
+// From module: EIC - External Interrupt Controller
+#include <eic.h>
+
 // From module: FLASHCALW Controller Software Driver
 #include <flashcalw.h>
+
+// From module: GPIO - General-Purpose Input/Output
+#include <gpio.h>
 
 // From module: Generic board support
 #include <board.h>
@@ -102,6 +111,16 @@
 
 // From module: USART - Univ. Syn Async Rec/Trans
 #include <usart.h>
+
+// From module: USB Host Vendor (Single Class support)
+#include <uhi_vendor.h>
+
+// From module: USB Host stack core
+#include <uhc.h>
+#include <uhd.h>
+
+// From module: USB Vendor Protocol
+#include <usb_protocol_vendor.h>
 
 // From module: WDT - Watchdog Timer
 #include <wdt_sam4l.h>

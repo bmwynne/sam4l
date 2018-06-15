@@ -43,9 +43,10 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
-#ifndef CONF_SLEEPMGR_H
-#define CONF_SLEEPMGR_H
+
+#ifndef CONF_SLEEPMGR_H_INCLUDED
+#define CONF_SLEEPMGR_H_INCLUDED
 
 #define CONFIG_SLEEPMGR_ENABLE
 
-#endif /* CONF_SLEEPMGR_H */
+#endif /* CONF_SLEEPMGR_H_INCLUDED */

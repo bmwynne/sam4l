@@ -138,7 +138,7 @@ uhc_enum_status_t uhi_vendor_install(uhc_device_t* dev)
 			if ((ptr_iface->bInterfaceClass   == VENDOR_CLASS)
 			&& (ptr_iface->bInterfaceSubClass == VENDOR_SUBCLASS)
 			&& (ptr_iface->bInterfaceProtocol == VENDOR_PROTOCOL)
-			&& (ptr_iface->bAlternateSetting == 1)) {
+			&& (ptr_iface->bAlternateSetting == 0)) {
 				// USB Vendor interface found
 				// Start allocation endpoint(s)
 				b_iface_supported = true;
@@ -283,7 +283,7 @@ bool uhi_vendor_control_out_run(uint8_t * buf, iram_size_t buf_size,
 			buf_size,
 			NULL,
 			callback);
-}
+ }
 
 bool uhi_vendor_bulk_is_available(void)
 {

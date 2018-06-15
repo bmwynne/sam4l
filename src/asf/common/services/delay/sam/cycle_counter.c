@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAM4L8 Xplained Pro board configuration
+ * \brief ARM functions for busy-wait delay loops
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -38,14 +38,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * \asf_license_stop
+ *
  */
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H_INCLUDED
-#define CONF_BOARD_H_INCLUDED
+#include "cycle_counter.h"
 
-//#define CONF_BOARD_KEEP_WATCHDOG_AT_INIT
+// Delay loop is put to SRAM so that FWS will not affect delay time
+OPTIMIZE_HIGH
+RAMFUNC
+void portable_delay_cycles(unsigned long n)
+{
+	UNUSED(n);
 
-#endif /* CONF_BOARD_H_INCLUDED */
+	__asm (
+		"loop: DMB	\n"
+		"SUBS R0, R0, #1  \n"
+		"BNE.N loop         "
+	);
+}

@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief Serial USART service configuration.
+ * \brief Common User Interface for USB host MSC application
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,28 +44,58 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_USART_SERIAL_H
-#define CONF_USART_SERIAL_H
+#ifndef _UI_H_
+#define _UI_H_
 
-/* A reference setting for UART */
-/** UART Interface */
-//#define CONF_UART            CONSOLE_UART
-/** Baudrate setting */
-//#define CONF_UART_BAUDRATE   115200
-/** Parity setting */
-//#define CONF_UART_PARITY     UART_MR_PAR_NO
+#include "uhc.h"
 
+//! \brief Initializes the user interface
+void ui_init(void);
 
-/* A reference setting for USART */
-/** USART Interface */
-//#define CONF_UART              USART1
-/** Baudrate setting */
-//#define CONF_UART_BAUDRATE     115200
-/** Character length setting */
-//#define CONF_UART_CHAR_LENGTH  US_MR_CHRL_8_BIT
-/** Parity setting */
-//#define CONF_UART_PARITY       US_MR_PAR_NO
-/** Stop bits setting */
-//#define CONF_UART_STOP_BITS    US_MR_NBSTOP_1_BIT
+/*! \brief Notify that the USB mode are switched automatically.
+ * This is possible only when ID pin is available.
+ *
+ * \param b_host_mode true, if the host mode has been selected
+ */
+void ui_usb_mode_change(bool b_host_mode);
 
-#endif/* CONF_USART_SERIAL_H_INCLUDED */
+/*! \brief Notify that a Vbus are changed
+ * Available only in USB hardware with Vbus monitoring.
+ *
+ * \param b_vbus_present true, if Vbus is high.
+ */
+void ui_usb_vbus_change(bool b_vbus_present);
+
+/*! \brief Notify that a Vbus error has occurred
+ * Available only in USB hardware with Vbus monitoring.
+ */
+void ui_usb_vbus_error(void);
+
+/*! \brief Notify that a USB device has been connected or disconnected.
+ *
+ * \param dev         Pointer on USB device information
+ * \param b_present   true, if the device has been connected
+ */
+void ui_usb_connection_event(uhc_device_t *dev, bool b_present);
+
+//! \brief Notify that a SOF has been sent (each 1 ms)
+void ui_usb_sof_event(void);
+
+/*! \brief Displays the result of the test
+ *
+ * \param b_success   true, if the test is successful
+ */
+void ui_test_finish(bool b_success);
+
+/*! \brief Notify the end of a USB device enumeration
+ *
+ * \param dev         Pointer on USB device information
+ * \param status      Status of the USB enumeration
+ */
+void ui_usb_enum_event(uhc_device_t *dev, uhc_enum_status_t status);
+
+extern volatile int ui_usb_dev_conn;
+extern volatile uhc_device_t * ui_usb_dev_dsc;
+extern volatile int ui_usb_dev_enum;
+
+#endif // _UI_H_
