@@ -170,7 +170,7 @@ void TC00_Handler(void)
 #define STRING_HEADER "-- CPH Cellular USB Printer Online --\r\n" \
 "-- "BOARD_NAME" --\r\n" \
 "-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL	\
-"-- Repo: github.com/bmwynne/sam4l"
+"-- Repo: https://github.com/bmwynne/sam4l"
 
 static void configure_console(void)
 {

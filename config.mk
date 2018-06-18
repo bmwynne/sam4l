@@ -55,6 +55,11 @@ TARGET_SRAM = sam4l-printer-sram.elf
 # List of C source files.
 CSRCS = \
        ../main.c                                          \
+       ../cellular/cp_cellular.c                          \
+       ../console/cp_console.c                            \
+       ../printer/cp_printer.c                            \
+       ../usb/cp_usb.c                                    \
+       ../usb/cp_uhi/uhi_zt230.c                          \
        common/services/clock/sam4l/dfll.c                 \
        common/services/clock/sam4l/osc.c                  \
        common/services/clock/sam4l/pll.c                  \
@@ -89,6 +94,11 @@ ASSRCS =
 # List of include paths.
 INC_PATH = \
        ../config                                          \
+       ../cellular                                        \
+       ../console                                         \
+       ../printer                                         \
+       ../usb                                             \
+       ../usb/cp_uhi                                      \
        ../                                                \
        common/boards                                      \
        common/services/clock                              \
