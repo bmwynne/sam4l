@@ -140,3 +140,15 @@ void pdca_config_enable(void) {
 	pdca_channel_enable(PDCA_RX_CHANNEL);	/* Enable PDCA channel, start receiving data. */
 	pdca_channel_enable(PDCA_TX_CHANNEL);	/* Enable PDCA channel, start receiving data. */
 }
+
+
+void run_console(void) {
+    pdca_config_enable();
+	configure_console();
+	configure_tc();
+	usart_enable_interrupt(BOARD_USART, US_IER_RXBUFF);	/* Enable USART RXBUFF interrupt */
+	NVIC_EnableIRQ(USART_IRQn);	/* Configure and enable interrupt of USART. */
+	tc_start(TC0, 0);	/* Start timer. */
+
+    printf("-----Console is up and running-----\n\r");
+}

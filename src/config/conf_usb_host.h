@@ -137,6 +137,6 @@
 
 #include "uhi_vendor.h"
 #include "ui.h"
-#include "main.h"
+#include "cp_usb.h"
 
 #endif // _CONF_USB_HOST_H_

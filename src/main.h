@@ -47,18 +47,5 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-//! \brief Notify that a SOF has been sent (each 1 ms)
-void main_usb_sof_event(void);
-
-/*! \brief Notify that a USB device vendor has been connected or disconnected.
- *
- * \param dev         Pointer on USB device information
- * \param b_present   true, if the device has been connected
- */
-void main_usb_vendor_change(uhc_device_t *dev, bool b_present);
-void get_num_conn_devices(void);
-void usb_init(void);
-void print_bulk_out(void);
-void print_bulk_in_cb(usb_add_t add, usb_ep_t ep, uhd_trans_status_t status, iram_size_t nb_transferred);
 
 #endif // _MAIN_H_

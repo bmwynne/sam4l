@@ -1,5 +1,6 @@
 #include <asf.h>
 #include "conf_cph.h"
+#include "conf_uart_serial.h"
 
 #define BUFFER_SIZE         100				/** Size of the receive buffer used by the PDCA, in bytes. */
 #define MAX_BUF_NUM         1				/** Max buffer number. */
@@ -12,7 +13,7 @@
 #define STRING_HEADER "-- CPH Cellular USB Printer Online --\r\n" \
 "-- "BOARD_NAME" --\r\n" \
 "-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL	\
-"-- Repo: https://github.com/bmwynne/sam4l"
+"-- Repo: https://github.com/bmwynne/sam4l\n\r"
 
 /** Receive buffer. */
 static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
@@ -55,3 +56,5 @@ void configure_console(void);
 void USART_Handler(void);
 
 void pdca_config_enable(void);
+
+void run_console(void);
