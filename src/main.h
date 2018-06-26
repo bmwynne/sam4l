@@ -46,6 +46,10 @@
 
 #ifndef _MAIN_H_
 #define _MAIN_H_
+#include <asf.h>
 
+volatile uint8_t * cp_app_selection;
 
 #endif // _MAIN_H_
+
+

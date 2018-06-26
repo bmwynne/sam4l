@@ -1,8 +1,9 @@
 #include <asf.h>
+#include <string.h>
 #include "conf_cph.h"
 #include "conf_uart_serial.h"
 
-#define BUFFER_SIZE         100				/** Size of the receive buffer used by the PDCA, in bytes. */
+#define BUFFER_SIZE         10			/** Size of the receive buffer used by the PDCA, in bytes. */
 #define MAX_BUF_NUM         1				/** Max buffer number. */
 #define ALL_INTERRUPT_MASK  0xffffffff		/** All interrupt mask. */
 #define PDCA_RX_CHANNEL  0
@@ -16,23 +17,21 @@
 "-- Repo: https://github.com/bmwynne/sam4l\n\r"
 
 /** Receive buffer. */
-static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
-
+extern volatile uint8_t gs_puc_buffer[2][BUFFER_SIZE];
 /** Next Receive buffer. */
-static uint8_t gs_puc_nextbuffer[2][BUFFER_SIZE];
-
+static  gs_puc_nextbuffer[2][BUFFER_SIZE];
 /** Current bytes in buffer. */
-static uint32_t gs_ul_size_buffer = BUFFER_SIZE;
-
+static uint32_t gs_ul_size_buffer;
 /** Current bytes in next buffer. */
-static uint32_t gs_ul_size_nextbuffer = BUFFER_SIZE;
-
+static uint32_t gs_ul_size_nextbuffer;
 /** Buffer number in use. */
-static uint8_t gs_uc_buf_num = 0;
-
+extern volatile uint8_t gs_uc_buf_num;
 /** Flag of one transfer end. */
-static uint8_t g_uc_transend_flag = 0;
+static uint8_t g_uc_transend_flag;
 
+extern volatile uint16_t g_v_uc_linebuffer[2][BUFFER_SIZE];
+
+int check_return(char *s);
 
 /**
  * \brief Configure Timer Counter 0 (TC0) to generate an interrupt every 200ms.
@@ -45,7 +44,8 @@ void configure_tc(void);
  * \brief Interrupt handler for TC00. Record the number of bytes received,
  * and then restart a read transfer on the USART if the transfer was stopped.
  */
-void TC00_Handler(void);
+
+// void TC00_Handler(void);
 
 void configure_console(void);
 
@@ -58,3 +58,8 @@ void USART_Handler(void);
 void pdca_config_enable(void);
 
 void run_console(void);
+
+void terminal(void);
+
+typedef void (* console_line_cb_t )(void);
+void console_init(uint8_t * buf, console_line_cb_t cb);

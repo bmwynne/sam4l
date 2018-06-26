@@ -93,13 +93,13 @@ ASSRCS =
 
 # List of include paths.
 INC_PATH = \
+       ../                                                \
        ../config                                          \
        ../cellular                                        \
        ../console                                         \
        ../printer                                         \
        ../usb                                             \
        ../usb/cp_uhi                                      \
-       ../                                                \
        common/boards                                      \
        common/services/clock                              \
        common/services/ioport                             \
