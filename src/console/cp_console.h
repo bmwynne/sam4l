@@ -3,7 +3,7 @@
 #include "conf_cph.h"
 #include "conf_uart_serial.h"
 
-#define BUFFER_SIZE         10			/** Size of the receive buffer used by the PDCA, in bytes. */
+#define BUFFER_SIZE         100			/** Size of the receive buffer used by the PDCA, in bytes. */
 #define MAX_BUF_NUM         1				/** Max buffer number. */
 #define ALL_INTERRUPT_MASK  0xffffffff		/** All interrupt mask. */
 #define PDCA_RX_CHANNEL  0
@@ -29,9 +29,11 @@ extern volatile uint8_t gs_uc_buf_num;
 /** Flag of one transfer end. */
 static uint8_t g_uc_transend_flag;
 
-extern volatile uint16_t g_v_uc_linebuffer[2][BUFFER_SIZE];
+extern volatile uint8_t g_v_puc_linebuffer[2048];
 
-int check_return(char *s);
+
+int parse_linebuffer(char *s);
+void double_buffer_handler(uint8_t * buff0, uint8_t * buff1, int len_b0, int len_b1);
 
 /**
  * \brief Configure Timer Counter 0 (TC0) to generate an interrupt every 200ms.

@@ -69,7 +69,7 @@ int main(void)
 	
 	while (1)
 	{
-		if (g_v_uc_linebuffer == 1) {
+		if (g_v_puc_linebuffer == 1) {
 			if (main_usb_in) {
 				main_usb_in = 0;
 				memset(in_buffer, 0, sizeof(in_buffer));
@@ -83,11 +83,11 @@ int main(void)
 				ui_usb_dev_enum = 0;
 			}
 		}
-		if (g_v_uc_linebuffer == 2)
+		if (g_v_puc_linebuffer == 2)
 		{
 			printf("console\n\r");
 		}
-		if (g_v_uc_linebuffer == 3)
+		if (g_v_puc_linebuffer == 3)
 		{
 			printf("Feature disabled\n\r");
 		}

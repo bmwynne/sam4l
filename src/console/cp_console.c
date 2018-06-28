@@ -2,11 +2,14 @@
 
 volatile uint8_t gs_puc_buffer[2][BUFFER_SIZE];
 static gs_puc_nextbuffer[2][BUFFER_SIZE];
-volatile uint16_t g_v_uc_linebuffer[2][BUFFER_SIZE]; 
+volatile uint8_t g_v_puc_linebuffer[2048];
 static uint32_t gs_ul_size_buffer = BUFFER_SIZE;
 static uint32_t gs_ul_size_nextbuffer = BUFFER_SIZE;
 volatile uint8_t gs_uc_buf_num = 0;
 static uint8_t g_uc_transend_flag = 0;
+
+volatile int g_v_i_push = 0;
+volatile int g_v_i_pop = 0;
 
 pdca_channel_config_t pdca_rx_options = {
 	.addr = (void *)gs_puc_buffer,		 /* memory address */
@@ -107,6 +110,20 @@ void configure_console(void)
 	stdio_serial_init(CONF_UART, &uart_serial_options);
 }
 
+//Memcpy to new buffer
+// parse through buffer and look for end of line or newline or some marker
+// return the buffered result to terminal app
+// use terminal result to delegate and execute mini commands
+// create command structure
+void double_buffer_handler(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b1)
+{
+	if (parse_linebuffer(buff0) == 1) {
+		printf("True");
+	} else {
+		printf("false");
+	}
+}
+
 void USART_Handler(void)
 {
 	uint32_t ul_status;
@@ -120,12 +137,9 @@ void USART_Handler(void)
 		/* Disable timer. */
 		tc_stop(TC0, 0);
 
-		/* Echo back buffer. */
 		// mem copy buffers to one large buffer
-		memcpy(g_v_uc_linebuffer, (void *)gs_puc_buffer[gs_uc_buf_num], gs_ul_size_buffer);
-		memcpy(g_v_uc_linebuffer, (void *)gs_puc_nextbuffer[gs_uc_buf_num], gs_ul_size_nextbuffer);
-		puts(g_v_uc_linebuffer);
-		
+		double_buffer_handler(gs_puc_buffer[gs_uc_buf_num], gs_puc_nextbuffer[gs_uc_buf_num], BUFFER_SIZE, BUFFER_SIZE);
+
 		if (g_uc_transend_flag)
 		{
 			gs_ul_size_buffer = BUFFER_SIZE;
@@ -146,7 +160,7 @@ void USART_Handler(void)
 	}
 }
 
-int check_return(char *s)
+int parse_linebuffer(char *s)
 {
 	for (; *s != '\0'; s++)
 	{
