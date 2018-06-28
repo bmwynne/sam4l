@@ -30,6 +30,7 @@ extern volatile uint8_t gs_uc_buf_num;
 static uint8_t g_uc_transend_flag;
 
 extern volatile uint8_t g_v_puc_linebuffer[2048];
+int tail;
 
 
 int parse_linebuffer(char *s);

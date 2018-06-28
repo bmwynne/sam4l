@@ -110,18 +110,35 @@ void configure_console(void)
 	stdio_serial_init(CONF_UART, &uart_serial_options);
 }
 
-//Memcpy to new buffer
-// parse through buffer and look for end of line or newline or some marker
-// return the buffered result to terminal app
-// use terminal result to delegate and execute mini commands
-// create command structure
+// Gaurd buffer overrun
+// have processs that pulls a ptr to the buffer and the len (tail) and reads that
+// (int number of characters) line_buffer_read(uint8_t * buf, int maxsize)
+//		gaurd
+//  (int tail return) linebuffer_getsize() 
+// inside of linebuffer memcpy linebuffer memory to dest addr to parameter stack , min number of char from max sized passed in or tail. set tail = 0;
+int tail = 0;
 void double_buffer_handler(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b1)
 {
-	if (parse_linebuffer(buff0) == 1) {
-		printf("True");
-	} else {
-		printf("false");
-	}
+	size_t linebuff_size = sizeof(g_v_puc_linebuffer);
+	memcpy(&g_v_puc_linebuffer[tail], buff0, len_b0);
+	tail += len_b0;
+	memcpy(&g_v_puc_linebuffer[tail], buff1, len_b1);
+	tail += len_b1;
+	printf("%s\n\r", g_v_puc_linebuffer);
+	// for (int i = 0; i < linebuff_size; i++)
+	// {
+	// 	if (g_v_puc_linebuffer[i] != 0)
+	// 	{
+	// 		if (parse_linebuffer(g_v_puc_linebuffer) == 1)
+	// 		{
+	// 			printf("Return\n\r");
+	// 		}
+	// 		printf("Buffer[%d]: %X\n\r", i, g_v_puc_linebuffer[i]);
+	// 		printf("%d", linebuff_size);
+
+	// 		delay_ms(70);
+	// 	}
+	// }
 }
 
 void USART_Handler(void)
@@ -138,7 +155,7 @@ void USART_Handler(void)
 		tc_stop(TC0, 0);
 
 		// mem copy buffers to one large buffer
-		double_buffer_handler(gs_puc_buffer[gs_uc_buf_num], gs_puc_nextbuffer[gs_uc_buf_num], BUFFER_SIZE, BUFFER_SIZE);
+		double_buffer_handler(gs_puc_buffer[gs_uc_buf_num], gs_puc_nextbuffer[gs_uc_buf_num], gs_ul_size_buffer, gs_ul_size_nextbuffer);
 
 		if (g_uc_transend_flag)
 		{
