@@ -45,7 +45,7 @@ OBJ_DIR = obj
 ARCH = cortex-m4
 
 # Target part: none, sam3n4 or sam4l4aa
-PART = sam4lc8c
+PART = sam4lc2a
 
 # Application target name. Given with suffix .a for library and .elf for a
 # standalone application.
@@ -73,7 +73,7 @@ CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common/utils/stdio/read.c                          \
        common/utils/stdio/write.c                         \
-       sam/boards/sam4l8_xplained_pro/init.c              \
+       sam/boards/user_board/init.c                       \
        sam/drivers/bpm/bpm.c                              \
        sam/drivers/flashcalw/flashcalw.c                  \
        sam/drivers/pdca/pdca.c                            \
@@ -115,7 +115,7 @@ INC_PATH = \
        common/utils                                       \
        common/utils/stdio/stdio_serial                    \
        sam/boards                                         \
-       sam/boards/sam4l8_xplained_pro                     \
+       sam/boards/user_board                              \
        sam/drivers/usbc                                   \
        sam/drivers/bpm                                    \
        sam/drivers/flashcalw                              \
@@ -143,12 +143,12 @@ LIBS =  \
        m                                                 
 
 # Path relative to top level directory pointing to a linker script.
-LINKER_SCRIPT_FLASH = sam/utils/linker_scripts/sam4l/sam4l8/gcc/flash.ld
-LINKER_SCRIPT_SRAM  = sam/utils/linker_scripts/sam4l/sam4l8/gcc/sram.ld
+LINKER_SCRIPT_FLASH = sam/utils/linker_scripts/sam4l/sam4l2/gcc/flash.ld
+#LINKER_SCRIPT_SRAM  = sam/utils/linker_scripts/sam4l/sam4l2/gcc/sram.ld
 
 # Path relative to top level directory pointing to a linker script.
-DEBUG_SCRIPT_FLASH = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_flash.gdb
-DEBUG_SCRIPT_SRAM  = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_sram.gdb
+#DEBUG_SCRIPT_FLASH = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_flash.gdb
+#DEBUG_SCRIPT_SRAM  = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_sram.gdb
 
 # Project type parameter: all, sram or flash
 PROJECT_TYPE        = flash
@@ -181,8 +181,8 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
-       -D BOARD=SAM4L8_XPLAINED_PRO                       \
-       -D __SAM4LC8C__                                    \
+       -D BOARD=USER_BOARD                                \
+       -D __SAM4LC2A__                                    \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 
