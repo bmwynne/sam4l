@@ -44,52 +44,40 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
+#include "main.h"
 #include <asf.h>
 #include <string.h>
 #include "cp_console.h"
 #include "cp_usb.h"
-#include "main.h"
 
-int main(void)
-{
-	sysclk_init();
-	irq_initialize_vectors();
-	cpu_irq_enable();
-	board_init();
-	delay_init();
-	usb_init();
-	run_console();
-	//sleepmgr_init();
+int main(void) {
+    sysclk_init();
+    irq_initialize_vectors();
+    cpu_irq_enable();
+    board_init();
+    delay_init();
+    usb_init();
+    run_console();
+    //sleepmgr_init();
+	get_num_conn_devices();
 
-	puts(STRING_HEADER);
-	printf("CPH Wireless Printer loaded; please select an application to run.\n\r");
-	printf("1. Send a print job\n\r");
-	printf("2. Console\n\r");
-	printf("3. Modem Comms\n\r");
-	
-	while (1)
-	{
-		if (g_v_puc_linebuffer == 1) {
-			if (main_usb_in) {
-				main_usb_in = 0;
-				memset(in_buffer, 0, sizeof(in_buffer));
-				uhi_vendor_bulk_in_run(in_buffer, sizeof(in_buffer), print_bulk_in_cb);
-			}
-			if (ui_usb_dev_enum)
-			{
-				printf("-----LOG MAIN WHILE-----:\n\rUSB DEVICE ENUMERATED.\n\r");
-				//get_num_conn_devices();
-				print_bulk_out();
-				ui_usb_dev_enum = 0;
-			}
-		}
-		if (g_v_puc_linebuffer == 2)
-		{
-			printf("console\n\r");
-		}
-		if (g_v_puc_linebuffer == 3)
-		{
-			printf("Feature disabled\n\r");
-		}
-	}
+    puts(STRING_HEADER);
+    printf("CPH Wireless Printer loaded; please select an application to run.\n\r");
+    printf("1. Send a print job\n\r");
+    printf("2. Console\n\r");
+    printf("3. Modem Comms\n\r");
+
+    while (1) {
+        if (main_usb_in) {
+            main_usb_in = 0;
+            memset(in_buffer, 0, sizeof(in_buffer));
+            uhi_vendor_bulk_in_run(in_buffer, sizeof(in_buffer), print_bulk_in_cb);
+        }
+        if (ui_usb_dev_enum) {
+            printf("-----LOG MAIN WHILE-----:\n\rUSB DEVICE ENUMERATED.\n\r");
+            //get_num_conn_devices();
+            print_bulk_out();
+            ui_usb_dev_enum = 0;
+        }
+    }
 }

@@ -99,7 +99,7 @@
 //! \name Board oscillator definitions
 //@{
 //! Osc frequency (Hz.) and startup time (RCOsc periods)
-#define FOSC0                     (12000000UL)
+#define FOSC0                     (25000000UL)
 //! Osc32 frequency (Hz.) and startup time (RCOsc periods)
 #define FOSC32                    (32768UL)
 #define BOARD_OSC32_IS_XTAL       true
@@ -135,18 +135,27 @@
 #define USB_VBOF_INACTIVE_LEVEL   0
 //@}
 
-//! \name USART connections to GPIO for Virtual Com Port
+//! \ Modem USART
 // @{
-#define COM_PORT_USART            USART0
-#define COM_PORT_USART_ID         ID_USART0
-#define COM_PORT_RX_PIN           PIN_PA05B_USART0_RXD
-#define COM_PORT_RX_GPIO          GPIO_PA05B_USART0_RXD
-#define COM_PORT_RX_MUX           MUX_PA05B_USART0_RXD
-#define COM_PORT_TX_PIN           PIN_PA07B_USART0_TXD
-#define COM_PORT_TX_GPIO          GPIO_PA07B_USART0_TXD
-#define COM_PORT_TX_MUX           MUX_PA07B_USART0_TXD
+// #define COM_PORT_USART            USART0
+// #define COM_PORT_USART_ID         ID_USART0
+// #define COM_PORT_RX_PIN           PIN_PA05B_USART0_RXD
+// #define COM_PORT_RX_GPIO          GPIO_PA05B_USART0_RXD
+// #define COM_PORT_RX_MUX           MUX_PA05B_USART0_RXD
+// #define COM_PORT_TX_PIN           PIN_PA07B_USART0_TXD
+// #define COM_PORT_TX_GPIO          GPIO_PA07B_USART0_TXD
+// #define COM_PORT_TX_MUX           MUX_PA07B_USART0_TXD
 // @}
 
+// MCU USART 
+#define COM_PORTUSART             USART2
+#define COM_PORT_USART_ID         ID_USART2
+#define COM_PORT_RX_PIN           PIN_PA19A_USART2_RXD
+#define COM_PORT_RX_GPIO          GPIO_PA19A_USART2_RXD
+#define COM_PORT_RX_MUX           MUX_PA19A_USART2_RXD
+#define COM_PORT_TX_PIN           PIN_PA20A_USART2_TXD
+#define COM_PORT_TX_GPIO          GPIO_PA20A_USART2_TXD
+#define COM_PORT_TX_MUX           MUX_PA20A_USART2_TXD
 
 /**
  * \name LED #0 definitions
