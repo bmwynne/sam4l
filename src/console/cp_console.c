@@ -110,14 +110,8 @@ void configure_console(void)
 	stdio_serial_init(CONF_UART, &uart_serial_options);
 }
 
-// Gaurd buffer overrun
-// have processs that pulls a ptr to the buffer and the len (tail) and reads that
-// (int number of characters) line_buffer_read(uint8_t * buf, int maxsize)
-//		gaurd
-//  (int tail return) linebuffer_getsize() 
-// inside of linebuffer memcpy linebuffer memory to dest addr to parameter stack , min number of char from max sized passed in or tail. set tail = 0;
 int tail = 0;
-void double_buffer_handler(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b1)
+void dma_usart_bufs_concat(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b1)
 {
 	size_t linebuff_size = sizeof(g_v_puc_linebuffer);
 	memcpy(&g_v_puc_linebuffer[tail], buff0, len_b0);
@@ -125,20 +119,6 @@ void double_buffer_handler(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b
 	memcpy(&g_v_puc_linebuffer[tail], buff1, len_b1);
 	tail += len_b1;
 	printf("%s\n\r", g_v_puc_linebuffer);
-	// for (int i = 0; i < linebuff_size; i++)
-	// {
-	// 	if (g_v_puc_linebuffer[i] != 0)
-	// 	{
-	// 		if (parse_linebuffer(g_v_puc_linebuffer) == 1)
-	// 		{
-	// 			printf("Return\n\r");
-	// 		}
-	// 		printf("Buffer[%d]: %X\n\r", i, g_v_puc_linebuffer[i]);
-	// 		printf("%d", linebuff_size);
-
-	// 		delay_ms(70);
-	// 	}
-	// }
 }
 
 void USART_Handler(void)
@@ -177,7 +157,7 @@ void USART_Handler(void)
 	}
 }
 
-int parse_linebuffer(char *s)
+int linebuf_parse(char *s)
 {
 	for (; *s != '\0'; s++)
 	{
@@ -205,7 +185,7 @@ void pdca_config_enable(void)
 // develop tick timer
 // pass timer through functions with callbacks
 
-void run_console(void)
+void console_run(void)
 {
 	pdca_config_enable();
 	configure_console();
