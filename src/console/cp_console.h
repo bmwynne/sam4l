@@ -33,8 +33,8 @@ extern volatile uint8_t g_v_puc_linebuffer[2048];
 int tail;
 
 
-int parse_linebuffer(char *s);
-void double_buffer_handler(uint8_t * buff0, uint8_t * buff1, int len_b0, int len_b1);
+int linebuf_parse(char *s);
+void dma_usart_bufs_concat(uint8_t * buff0, uint8_t * buff1, int len_b0, int len_b1);
 
 /**
  * \brief Configure Timer Counter 0 (TC0) to generate an interrupt every 200ms.
@@ -60,7 +60,7 @@ void USART_Handler(void);
 
 void pdca_config_enable(void);
 
-void run_console(void);
+void console_run(void);
 
 void terminal(void);
 
