@@ -1,13 +1,14 @@
 #include "cp_console.h"
 
-volatile uint8_t gs_puc_buffer[2][BUFFER_SIZE];
-static gs_puc_nextbuffer[2][BUFFER_SIZE];
-volatile uint8_t g_v_puc_linebuffer[2048];
+static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
+static uint8_t gs_puc_nextbuffer[2][BUFFER_SIZE];
+
 static uint32_t gs_ul_size_buffer = BUFFER_SIZE;
 static uint32_t gs_ul_size_nextbuffer = BUFFER_SIZE;
 volatile uint8_t gs_uc_buf_num = 0;
 static uint8_t g_uc_transend_flag = 0;
 
+volatile uint8_t g_v_puc_linebuffer[2048];
 volatile int g_v_i_push = 0;
 volatile int g_v_i_pop = 0;
 
@@ -135,7 +136,7 @@ void USART_Handler(void)
 		tc_stop(TC0, 0);
 
 		// mem copy buffers to one large buffer
-		double_buffer_handler(gs_puc_buffer[gs_uc_buf_num], gs_puc_nextbuffer[gs_uc_buf_num], gs_ul_size_buffer, gs_ul_size_nextbuffer);
+		dma_usart_bufs_concat(gs_puc_buffer[gs_uc_buf_num], gs_puc_nextbuffer[gs_uc_buf_num], gs_ul_size_buffer, gs_ul_size_nextbuffer);
 
 		if (g_uc_transend_flag)
 		{

@@ -48,6 +48,7 @@
 #include <asf.h>
 #include <string.h>
 #include "cp_console.h"
+#include "cp_printer.h"
 #include "cp_usb.h"
 
 int main(void) {
@@ -57,27 +58,11 @@ int main(void) {
     board_init();
     delay_init();
     usb_init();
-    run_console();
-    //sleepmgr_init();
-	get_num_conn_devices();
+    console_run();
 
     puts(STRING_HEADER);
-    printf("CPH Wireless Printer loaded; please select an application to run.\n\r");
-    printf("1. Send a print job\n\r");
-    printf("2. Console\n\r");
-    printf("3. Modem Comms\n\r");
 
     while (1) {
-        if (main_usb_in) {
-            main_usb_in = 0;
-            memset(in_buffer, 0, sizeof(in_buffer));
-            uhi_vendor_bulk_in_run(in_buffer, sizeof(in_buffer), print_bulk_in_cb);
-        }
-        if (ui_usb_dev_enum) {
-            printf("-----LOG MAIN WHILE-----:\n\rUSB DEVICE ENUMERATED.\n\r");
-            //get_num_conn_devices();
-            print_bulk_out();
-            ui_usb_dev_enum = 0;
-        }
+		print();
     }
 }

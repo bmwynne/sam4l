@@ -17,9 +17,9 @@
 "-- Repo: https://github.com/bmwynne/sam4l\n\r"
 
 /** Receive buffer. */
-extern volatile uint8_t gs_puc_buffer[2][BUFFER_SIZE];
+static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
 /** Next Receive buffer. */
-static  gs_puc_nextbuffer[2][BUFFER_SIZE];
+static uint8_t gs_puc_nextbuffer[2][BUFFER_SIZE];
 /** Current bytes in buffer. */
 static uint32_t gs_ul_size_buffer;
 /** Current bytes in next buffer. */

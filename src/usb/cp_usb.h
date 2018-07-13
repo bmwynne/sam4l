@@ -1,4 +1,5 @@
-#include "asf.h"
+#include <asf.h>
+#include <string.h>
 #include "conf_usb_host.h"
 #include "conf_cph.h"
 
