@@ -55,8 +55,11 @@ TARGET_SRAM = sam4l-printer-sram.elf
 # List of C source files.
 CSRCS = \
        ../main.c                                          \
-       ../cellular/cp_cellular.c                          \
+       ../cellular/cellular.c                             \
        ../console/cp_console.c                            \
+       ../gps/gps.c                                       \
+       ../modem_service/mdm_service.c                     \
+       ../power/power.c                                   \
        ../printer/cp_printer.c                            \
        ../usb/cp_usb.c                                    \
        ../usb/cp_uhi/uhi_zt230.c                          \
@@ -97,6 +100,9 @@ INC_PATH = \
        ../config                                          \
        ../cellular                                        \
        ../console                                         \
+       ../gps                                             \
+       ../modem_service                                   \
+       ../power                                           \
        ../printer                                         \
        ../usb                                             \
        ../usb/cp_uhi                                      \

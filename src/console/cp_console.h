@@ -1,5 +1,6 @@
 #include <asf.h>
 #include <string.h>
+#include <stdio.h>
 #include "conf_cph.h"
 #include "conf_uart_serial.h"
 
@@ -35,12 +36,14 @@ int tail;
 
 int linebuf_parse(char *s);
 void dma_usart_bufs_concat(uint8_t * buff0, uint8_t * buff1, int len_b0, int len_b1);
+int read(void * uart_fd, void * data_buf, int data_len);
+int write(void *uart_fd, void * data, int data_len);
+void close(void * uart);
 
 /**
  * \brief Configure Timer Counter 0 (TC0) to generate an interrupt every 200ms.
  * This interrupt will be used to flush USART input and echo back.
  */
-
 void configure_tc(void);
 
 /**
@@ -50,6 +53,7 @@ void configure_tc(void);
 
 // void TC00_Handler(void);
 
+// Configure USART serial options
 void configure_console(void);
 
 /**
@@ -57,6 +61,7 @@ void configure_console(void);
  * next receive.
  */
 void USART_Handler(void);
+
 
 void pdca_config_enable(void);
 

@@ -170,6 +170,20 @@ int linebuf_parse(char *s)
 	return 1;
 }
 
+int read(void * uart_fd, void * data_buf, int data_len) {
+	int n_bytes_rx = 0;
+	return n_bytes_rx;
+}
+
+int write(void *uart_fd, void * data, int data_len) {
+	int n_bytes_tx = 0;
+	return n_bytes_tx;
+}
+
+void close(void * uart) {
+
+}
+
 void pdca_config_enable(void)
 {
 	pdca_enable(PDCA);											/* Enable PDCA module clock */
