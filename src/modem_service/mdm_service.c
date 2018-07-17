@@ -1,6 +1,6 @@
 #include "mdm_service.h"
 #include "cellular.h"
-#include "cp_console.h"
+#include "mdm_usart.h"
 #include "gps.h"
 #include "power.h"
 

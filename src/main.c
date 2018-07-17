@@ -47,7 +47,7 @@
 #include "main.h"
 #include <asf.h>
 #include <string.h>
-#include "cp_console.h"
+#include "mdm_usart.h"
 #include "cp_printer.h"
 #include "cp_usb.h"
 #include "mdm_service.h"
@@ -65,9 +65,6 @@ int main(void) {
     int b_rx = 0;
   
     while (1) {
-      
-      // b_rx = mdm_read(linebuffer_data, sizeof(linebuffer_data));
-      // printf("%d\n\r", b_rx);
-      
+      b_rx = mdm_read(linebuffer_data, sizeof(linebuffer_data));      
     }
 }

@@ -1,4 +1,4 @@
-#include "cp_console.h"
+#include "mdm_usart.h"
 
 static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
 static uint8_t gs_puc_nextbuffer[2][BUFFER_SIZE];
@@ -190,13 +190,14 @@ int read(void *uart_fd, void *data_buf, int data_len) {
     //     }
     // }
     // return nb_done;
-    int n_bytes_rx = 0;
+    int n_bytes_rx = data_len;
     printf("%s\n\r", data_buf);
     return n_bytes_rx;
 }
 
 int write(void *uart_fd, void *data, int data_len) {
     int n_bytes_tx = 0;
+    printf("%d", n_bytes_tx);
     return n_bytes_tx;
 }
 

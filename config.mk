@@ -56,7 +56,7 @@ TARGET_SRAM = sam4l-printer-sram.elf
 CSRCS = \
        ../main.c                                          \
        ../cellular/cellular.c                             \
-       ../console/cp_console.c                            \
+       ../modem_usart/mdm_usart.c                            \
        ../gps/gps.c                                       \
        ../modem_service/mdm_service.c                     \
        ../power/power.c                                   \
@@ -99,7 +99,7 @@ INC_PATH = \
        ../                                                \
        ../config                                          \
        ../cellular                                        \
-       ../console                                         \
+       ../modem_usart                                     \
        ../gps                                             \
        ../modem_service                                   \
        ../power                                           \
