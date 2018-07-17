@@ -59,50 +59,47 @@
  * \param mode Mode masks to configure for the specified pin (\ref ioport_modes)
  */
 #define ioport_set_pin_peripheral_mode(pin, mode) \
-	do {\
-		ioport_set_pin_mode(pin, mode);\
-		ioport_disable_pin(pin);\
-	} while (0)
+    do {                                          \
+        ioport_set_pin_mode(pin, mode);           \
+        ioport_disable_pin(pin);                  \
+    } while (0)
 
-void board_init(void)
-{
+void board_init(void) {
 #ifndef CONF_BOARD_KEEP_WATCHDOG_AT_INIT
-	struct wdt_dev_inst wdt_inst;
-	struct wdt_config   wdt_cfg;
+    struct wdt_dev_inst wdt_inst;
+    struct wdt_config wdt_cfg;
 
-	wdt_get_config_defaults(&wdt_cfg);
-	wdt_init(&wdt_inst, WDT, &wdt_cfg);
-	wdt_disable(&wdt_inst);
+    wdt_get_config_defaults(&wdt_cfg);
+    wdt_init(&wdt_inst, WDT, &wdt_cfg);
+    wdt_disable(&wdt_inst);
 #endif
 
-	/* Initialize IOPORT */
-	ioport_init();
+    /* Initialize IOPORT */
+    ioport_init();
 
-	/* Initialize LED0, turned off */
-	ioport_set_pin_dir(LED_0_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(LED_0_PIN, IOPORT_PIN_LEVEL_HIGH);
+    /* Initialize LED0, turned off */
+    ioport_set_pin_dir(LED_0_PIN, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_level(LED_0_PIN, IOPORT_PIN_LEVEL_HIGH);
 
-
-#if defined (CONF_BOARD_COM_PORT)
-	ioport_set_pin_peripheral_mode(COM_PORT_RX_PIN, COM_PORT_RX_MUX);
-	ioport_set_pin_peripheral_mode(COM_PORT_TX_PIN, COM_PORT_TX_MUX);
+#if defined(CONF_BOARD_COM_PORT)
+    ioport_set_pin_peripheral_mode(COM_PORT_RX_PIN, COM_PORT_RX_MUX);
+    ioport_set_pin_peripheral_mode(COM_PORT_TX_PIN, COM_PORT_TX_MUX);
 #endif
 
 #if (defined CONF_BOARD_USB_PORT)
-	ioport_set_pin_peripheral_mode(PIN_PA25A_USBC_DM, MUX_PA25A_USBC_DM);
-	ioport_set_pin_peripheral_mode(PIN_PA26A_USBC_DP, MUX_PA26A_USBC_DP);
-# if defined(CONF_BOARD_USB_VBUS_DETECT)
-	ioport_set_pin_dir(USB_VBUS_PIN, IOPORT_DIR_INPUT);
-# endif
-# if defined(CONF_BOARD_USB_ID_DETECT)
-	ioport_set_pin_dir(USB_ID_PIN, IOPORT_DIR_INPUT);
-# endif
-# if defined(CONF_BOARD_USB_VBUS_CONTROL)
-	ioport_set_pin_dir(USB_VBOF_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(USB_VBOF_PIN, USB_VBOF_INACTIVE_LEVEL);
-# endif
+    ioport_set_pin_peripheral_mode(PIN_PA25A_USBC_DM, MUX_PA25A_USBC_DM);
+    ioport_set_pin_peripheral_mode(PIN_PA26A_USBC_DP, MUX_PA26A_USBC_DP);
+#if defined(CONF_BOARD_USB_VBUS_DETECT)
+    ioport_set_pin_dir(USB_VBUS_PIN, IOPORT_DIR_INPUT);
 #endif
-
+#if defined(CONF_BOARD_USB_ID_DETECT)
+    ioport_set_pin_dir(USB_ID_PIN, IOPORT_DIR_INPUT);
+#endif
+#if defined(CONF_BOARD_USB_VBUS_CONTROL)
+    ioport_set_pin_dir(USB_VBOF_PIN, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_level(USB_VBOF_PIN, USB_VBOF_INACTIVE_LEVEL);
+#endif
+#endif
 }
 
 /** @} */

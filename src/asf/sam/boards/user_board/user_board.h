@@ -84,14 +84,6 @@
 #endif // __DOXYGEN__
 /** @} */
 
-/**
- * \defgroup sam4l8_xplained_pro_features_group Features
- *
- * Symbols that describe features and capabilities of the board.
- *
- * @{
- */
-
 //! Name string macro
 #define BOARD_NAME          "CPHT Printer Gateway 1.0"
 #define MCU_SOC_NAME        "ATSAM4LC2A"
@@ -143,12 +135,12 @@
 // #define COM_PORT_RX_GPIO          GPIO_PA05B_USART0_RXD
 // #define COM_PORT_RX_MUX           MUX_PA05B_USART0_RXD
 // #define COM_PORT_TX_PIN           PIN_PA07B_USART0_TXD
-// #define COM_PORT_TX_GPIO          GPIO_PA07B_USART0_TXD
+// #define COM_PORT_TX_GPIO          GPIO_PA07B_USART0_TXD 
 // #define COM_PORT_TX_MUX           MUX_PA07B_USART0_TXD
 // @}
 
 // MCU USART 
-#define COM_PORTUSART             USART2
+#define COM_PORT_USART            USART2
 #define COM_PORT_USART_ID         ID_USART2
 #define COM_PORT_RX_PIN           PIN_PA19A_USART2_RXD
 #define COM_PORT_RX_GPIO          GPIO_PA19A_USART2_RXD

@@ -57,13 +57,13 @@
 #include "conf_board.h"
 #include "conf_clock.h"
 
-#define BOARD_ID_USART             USART1
-#define BOARD_USART                USART1
-#define BOARD_USART_BAUDRATE       115200
-#define USART_Handler              USART1_Handler
-#define USART_IRQn                 USART1_IRQn
-#define PDCA_PID_USART_RX          1
-#define PDCA_PID_USART_TX          19
+#define BOARD_ID_USART             USART2
+#define BOARD_USART                USART2
+#define BOARD_USART_BAUDRATE       9600
+#define USART_Handler              USART2_Handler
+#define USART_IRQn                 USART2_IRQn
+#define PDCA_PID_USART_RX          19
+#define PDCA_PID_USART_TX          20
 
 
 #endif /* CONF_CPH_H_INCLUDED */

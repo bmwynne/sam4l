@@ -4,7 +4,7 @@
 #include "conf_cph.h"
 #include "conf_uart_serial.h"
 
-#define BUFFER_SIZE         100			/** Size of the receive buffer used by the PDCA, in bytes. */
+#define BUFFER_SIZE         10			/** Size of the receive buffer used by the PDCA, in bytes. */
 #define MAX_BUF_NUM         1				/** Max buffer number. */
 #define ALL_INTERRUPT_MASK  0xffffffff		/** All interrupt mask. */
 #define PDCA_RX_CHANNEL  0
@@ -21,6 +21,7 @@
 static uint8_t gs_puc_buffer[2][BUFFER_SIZE];
 /** Next Receive buffer. */
 static uint8_t gs_puc_nextbuffer[2][BUFFER_SIZE];
+static uint8_t gs_v_puc_linebuffer[BUFFER_SIZE];
 /** Current bytes in buffer. */
 static uint32_t gs_ul_size_buffer;
 /** Current bytes in next buffer. */
@@ -30,12 +31,13 @@ extern volatile uint8_t gs_uc_buf_num;
 /** Flag of one transfer end. */
 static uint8_t g_uc_transend_flag;
 
-extern volatile uint8_t g_v_puc_linebuffer[2048];
+extern volatile uint8_t linebuffer_data[BUFFER_SIZE * 2 + 1];
 int tail;
 
 
-int linebuf_parse(char *s);
+
 void dma_usart_bufs_concat(uint8_t * buff0, uint8_t * buff1, int len_b0, int len_b1);
+int linebuf_parse(char *s);
 int read(void * uart_fd, void * data_buf, int data_len);
 int write(void *uart_fd, void * data, int data_len);
 void close(void * uart);

@@ -50,6 +50,7 @@
 #include "cp_console.h"
 #include "cp_printer.h"
 #include "cp_usb.h"
+#include "mdm_service.h"
 
 int main(void) {
     sysclk_init();
@@ -61,8 +62,12 @@ int main(void) {
     console_run();
 
     puts(STRING_HEADER);
-
+    int b_rx = 0;
+  
     while (1) {
-		print();
+      
+      // b_rx = mdm_read(linebuffer_data, sizeof(linebuffer_data));
+      // printf("%d\n\r", b_rx);
+      
     }
 }
