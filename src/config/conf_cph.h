@@ -62,7 +62,20 @@
 #define BOARD_USART_BAUDRATE       9600
 #define USART_Handler              USART2_Handler
 #define USART_IRQn                 USART2_IRQn
-#define PDCA_PID_USART_RX          19
+
+/*
+The following two defines are DMA Peripheral Identity Values this is in the Sam4l8 data sheet under 16. Peripheral DMA 16.7 Module Configuration
+USART0:
+    RX: PID0
+    TX: PID18
+USART1:
+    RX: PID1
+    TX: PID19
+USART2:
+    RX: PID2
+    TX: PID20
+*/
+#define PDCA_PID_USART_RX          2    
 #define PDCA_PID_USART_TX          20
 
 
