@@ -9,7 +9,7 @@ volatile uint8_t gs_uc_buf_num = 0;
 static uint8_t g_uc_transend_flag = 0;
 
 
-volatile uint8_t linebuffer_data[BUFFER_SIZE * 2 + 1];
+//volatile uint8_t linebuffer_data[BUFFER_SIZE * 2 + 1];
 volatile int g_v_i_push = 0;
 volatile int g_v_i_pop = 0;
 
@@ -113,13 +113,13 @@ void dma_usart_bufs_concat(uint8_t *buff0, uint8_t *buff1, int len_b0, int len_b
     memcpy(&gs_v_puc_linebuffer[tail], buff1, len_b1);
     tail += len_b1;
 
-    count += 1;
+    count += len_b0 + len_b1;
 
-    if (count == sizeof(gs_v_puc_linebuffer)) {
-        memcpy(linebuffer_data, gs_v_puc_linebuffer, sizeof(gs_v_puc_linebuffer));
-        tail = 0;
-        count = 0;
-    }
+//    if (count == sizeof(gs_v_puc_linebuffer)) {
+//        memcpy(linebuffer_data, gs_v_puc_linebuffer, sizeof(gs_v_puc_linebuffer));
+//        tail = 0;
+//        count = 0;
+//    }
 }
 
 void USART_Handler(void) {
@@ -190,9 +190,21 @@ int read(void *uart_fd, void *data_buf, int data_len) {
     //     }
     // }
     // return nb_done;
-    int n_bytes_rx = data_len;
-    printf("%s\n\r", data_buf);
-    return n_bytes_rx;
+    
+    //int n_bytes_rx = data_len;
+    //printf("%s\n\r", gs_v_puc_linebuffer);
+    //return n_bytes_rx;
+
+    int size = 0;
+    if (count > 0) {
+        cpu_irq_disable();
+        size = (data_len < count ? data_len : count);
+        memcpy(data_buf, gs_v_puc_linebuffer, size);
+        tail=0;
+        count=0;
+        cpu_irq_enable();
+    }
+    return size;
 }
 
 int write(void *uart_fd, void *data, int data_len) {

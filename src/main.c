@@ -52,6 +52,9 @@
 #include "cp_usb.h"
 #include "mdm_service.h"
 
+#define LINEBUFFER_SIZE 20
+uint8_t linebuffer[LINEBUFFER_SIZE];
+
 int main(void) {
     sysclk_init();
     irq_initialize_vectors();
@@ -65,6 +68,10 @@ int main(void) {
     int b_rx = 0;
   
     while (1) {
-      b_rx = mdm_read(linebuffer_data, sizeof(linebuffer_data));      
+      b_rx = mdm_read(linebuffer, LINEBUFFER_SIZE);    
+      if (b_rx > 0) {
+        printf("RCV: %d %s\n\r", b_rx, linebuffer);
+        memset(linebuffer, 0, LINEBUFFER_SIZE);
+      }  
     }
 }

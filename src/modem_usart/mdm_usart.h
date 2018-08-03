@@ -31,8 +31,8 @@ extern volatile uint8_t gs_uc_buf_num;
 /** Flag of one transfer end. */
 static uint8_t g_uc_transend_flag;
 
-extern volatile uint8_t linebuffer_data[BUFFER_SIZE * 2 + 1];
-int tail;
+//extern volatile uint8_t linebuffer_data[BUFFER_SIZE * 2 + 1];
+//int tail;
 
 
 
