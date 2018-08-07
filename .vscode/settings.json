@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "conf_clock.h": "c"
-    }
+        "conf_clock.h": "c",
+        "conf_cph.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

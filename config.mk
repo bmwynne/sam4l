@@ -37,7 +37,7 @@
 #
 
 # Path to top level ASF directory relative to this project directory.
-PRJ_PATH = src/asf
+PRJ_PATH = src
 BUILD_DIR = build 
 OBJ_DIR = obj
 
@@ -45,7 +45,7 @@ OBJ_DIR = obj
 ARCH = cortex-m4
 
 # Target part: none, sam3n4 or sam4l4aa
-PART = sam4lc8c
+PART = sam4lc2a
 
 # Application target name. Given with suffix .a for library and .elf for a
 # standalone application.
@@ -54,78 +54,95 @@ TARGET_SRAM = sam4l-printer-sram.elf
 
 # List of C source files.
 CSRCS = \
-       ../main.c                                          \
-       common/services/clock/sam4l/dfll.c                 \
-       common/services/clock/sam4l/osc.c                  \
-       common/services/clock/sam4l/pll.c                  \
-       common/services/clock/sam4l/sysclk.c               \
-       common/services/serial/usart_serial.c              \
-       common/services/sleepmgr/sam4l/sleepmgr.c          \
-       common/services/usb/class/vendor/host/example/sam4lc8c_sam4l8_xplained_pro/ui.c \
-       common/services/usb/class/vendor/host/uhi_vendor.c \
-       common/services/usb/uhc/uhc.c                      \
-       common/services/delay/sam/cycle_counter.c          \
-       common/utils/interrupt/interrupt_sam_nvic.c        \
-       common/utils/stdio/read.c                          \
-       common/utils/stdio/write.c                         \
-       sam/boards/sam4l8_xplained_pro/init.c              \
-       sam/drivers/bpm/bpm.c                              \
-       sam/drivers/flashcalw/flashcalw.c                  \
-       sam/drivers/pdca/pdca.c                            \
-       sam/drivers/tc/tc.c                                \
-       sam/drivers/usart/usart.c                          \
-       sam/drivers/wdt/wdt_sam4l.c                        \
-       sam/drivers/eic/eic.c                              \
-       sam/drivers/gpio/gpio.c                            \
-       sam/drivers/usbc/usbc_host.c                       \
-       sam/utils/cmsis/sam4l/source/templates/exceptions.c \
-       sam/utils/cmsis/sam4l/source/templates/gcc/startup_sam4l.c \
-       sam/utils/cmsis/sam4l/source/templates/system_sam4l.c \
-       sam/utils/syscalls/gcc/syscalls.c
+       main.c                                          \
+       cellular/cellular.c                             \
+       modem_usart/mdm_usart.c                            \
+       gps/gps.c                                       \
+       modem_service/mdm_service.c                     \
+       power/power.c                                   \
+       printer/cp_printer.c                            \
+       usb/cp_usb.c                                    \
+       usb/cp_uhi/uhi_zt230.c                          \
+       asf/common/services/clock/sam4l/dfll.c                 \
+       asf/common/services/clock/sam4l/osc.c                  \
+       asf/common/services/clock/sam4l/pll.c                  \
+       asf/common/services/clock/sam4l/sysclk.c               \
+       asf/common/services/serial/usart_serial.c              \
+       asf/common/services/sleepmgr/sam4l/sleepmgr.c          \
+       asf/common/services/usb/class/vendor/host/example/sam4lc8c_sam4l8_xplained_pro/ui.c \
+       asf/common/services/usb/class/vendor/host/uhi_vendor.c \
+       asf/common/services/usb/uhc/uhc.c                      \
+       asf/common/services/delay/sam/cycle_counter.c          \
+       asf/common/utils/interrupt/interrupt_sam_nvic.c        \
+       asf/common/utils/stdio/read.c                          \
+       asf/common/utils/stdio/write.c                         \
+       asf/sam/boards/user_board/init.c                       \
+       asf/sam/drivers/bpm/bpm.c                              \
+       asf/sam/drivers/flashcalw/flashcalw.c                  \
+       asf/sam/drivers/pdca/pdca.c                            \
+       asf/sam/drivers/tc/tc.c                                \
+       asf/sam/drivers/usart/usart.c                          \
+       asf/sam/drivers/wdt/wdt_sam4l.c                        \
+       asf/sam/drivers/eic/eic.c                              \
+       asf/sam/drivers/gpio/gpio.c                            \
+       asf/sam/drivers/usbc/usbc_host.c                       \
+       asf/sam/utils/cmsis/sam4l/source/templates/exceptions.c \
+       asf/sam/utils/cmsis/sam4l/source/templates/gcc/startup_sam4l.c \
+       asf/sam/utils/cmsis/sam4l/source/templates/system_sam4l.c \
+       asf/sam/utils/syscalls/gcc/syscalls.c
 
 # List of assembler source files.
 ASSRCS = 
 
 # List of include paths.
 INC_PATH = \
-       ../config                                          \
-       ../                                                \
-       common/boards                                      \
-       common/services/clock                              \
-       common/services/ioport                             \
-       common/services/serial                             \
-       common/services/serial/sam_uart                    \
-       common/services/sleepmgr                           \
-       common/services/usb                                \
-       common/services/usb/uhc                            \
-       common/services/usb/class/vendor                   \
-       common/services/usb/class/vendor/host              \
-       common/services/delay                              \
-       common/services/delay/sam                          \
-       common/utils                                       \
-       common/utils/stdio/stdio_serial                    \
-       sam/boards                                         \
-       sam/boards/sam4l8_xplained_pro                     \
-       sam/drivers/usbc                                   \
-       sam/drivers/bpm                                    \
-       sam/drivers/flashcalw                              \
-       sam/drivers/pdca                                   \
-       sam/drivers/tc                                     \
-       sam/drivers/usart                                  \
-       sam/drivers/wdt                                    \
-       sam/drivers/eic                                    \
-       sam/drivers/gpio                                   \
-       sam/utils                                          \
-       sam/utils/cmsis/sam4l/include                      \
-       sam/utils/cmsis/sam4l/source/templates             \
-       sam/utils/header_files                             \
-       sam/utils/preprocessor                             \
-       thirdparty/CMSIS/Include                           \
-       thirdparty/CMSIS/Lib/GCC 
+       /                                               \
+       config                                          \
+       cellular                                        \
+       modem_usart                                     \
+       gps                                             \
+       modem_service                                   \
+       power                                           \
+       printer                                         \
+       usb                                             \
+       usb/cp_uhi                                      \
+       asf/                                            \
+       asf/common/boards                                      \
+       asf/common/services/clock                              \
+       asf/common/services/ioport                             \
+       asf/common/services/serial                             \
+       asf/common/services/serial/sam_uart                    \
+       asf/common/services/sleepmgr                           \
+       asf/common/services/usb                                \
+       asf/common/services/usb/uhc                            \
+       asf/common/services/usb/class/vendor                   \
+       asf/common/services/usb/class/vendor/host              \
+       asf/common/services/delay                              \
+       asf/common/services/delay/sam                          \
+       asf/common/utils                                       \
+       asf/common/utils/stdio/stdio_serial                    \
+       asf/sam/boards                                         \
+       asf/sam/boards/user_board                              \
+       asf/sam/drivers/usbc                                   \
+       asf/sam/drivers/bpm                                    \
+       asf/sam/drivers/flashcalw                              \
+       asf/sam/drivers/pdca                                   \
+       asf/sam/drivers/tc                                     \
+       asf/sam/drivers/usart                                  \
+       asf/sam/drivers/wdt                                    \
+       asf/sam/drivers/eic                                    \
+       asf/sam/drivers/gpio                                   \
+       asf/sam/utils                                          \
+       asf/sam/utils/cmsis/sam4l/include                      \
+       asf/sam/utils/cmsis/sam4l/source/templates             \
+       asf/sam/utils/header_files                             \
+       asf/sam/utils/preprocessor                             \
+       asf/thirdparty/CMSIS/Include                           \
+       asf/thirdparty/CMSIS/Lib/GCC 
 
 # Additional search paths for libraries.
 LIB_PATH =  \
-       thirdparty/CMSIS/Lib/GCC                          
+       asf/thirdparty/CMSIS/Lib/GCC                          
 
 # List of libraries to use during linking.
 LIBS =  \
@@ -133,12 +150,12 @@ LIBS =  \
        m                                                 
 
 # Path relative to top level directory pointing to a linker script.
-LINKER_SCRIPT_FLASH = sam/utils/linker_scripts/sam4l/sam4l8/gcc/flash.ld
-LINKER_SCRIPT_SRAM  = sam/utils/linker_scripts/sam4l/sam4l8/gcc/sram.ld
+LINKER_SCRIPT_FLASH = asf/sam/utils/linker_scripts/sam4l/sam4l2/gcc/flash.ld
+#LINKER_SCRIPT_SRAM  = sam/utils/linker_scripts/sam4l/sam4l2/gcc/sram.ld
 
 # Path relative to top level directory pointing to a linker script.
-DEBUG_SCRIPT_FLASH = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_flash.gdb
-DEBUG_SCRIPT_SRAM  = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_sram.gdb
+#DEBUG_SCRIPT_FLASH = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_flash.gdb
+#DEBUG_SCRIPT_SRAM  = sam/boards/sam4l8_xplained_pro/debug_scripts/gcc/sam4l8_xplained_pro_sram.gdb
 
 # Project type parameter: all, sram or flash
 PROJECT_TYPE        = flash
@@ -171,8 +188,8 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
-       -D BOARD=SAM4L8_XPLAINED_PRO                       \
-       -D __SAM4LC8C__                                    \
+       -D BOARD=USER_BOARD                                \
+       -D __SAM4LC2A__                                    \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 
